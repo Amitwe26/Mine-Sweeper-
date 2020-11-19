@@ -10,6 +10,26 @@ body {
     text-align: center;
     
 }
+button { 
+    display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight:bolder;
+}
+button:hover{
+    padding-right: 15px;
+    padding-left: 15px;
+    transition: all 1.3s;
+}
+.b1 {
+    width: 90px;
+    font-size:50px;
+    background-color: black;
+    border: none;
+    outline: none; 
+}
 table{
     margin: auto;
     cursor: pointer;
@@ -25,14 +45,28 @@ table{
     border-color: #eee #999 #999 #eee;
     height: 45px;
     width: 45px;
-    border-spacing: 0px;
+    border-spacing: 1px;
     padding: 5px;
     box-sizing: border-box;
     
   
 }
+.cell:hover {
+    background-color:  rgb(245, 241, 241);;
+}
 
 .cellOpen {
     background-color:white;
     border:none;
+}
+.cellMine { 
+    background-color: red;
+
+}
+.timmer span { 
+    border: 1px solid black;
+    color: red;
+    background-color: #ccc;
+   padding: 1px 30px;
+   border-radius: 5px;
 }
