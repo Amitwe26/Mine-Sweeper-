@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Mine Sweeper</title>
+</head>
+
+<body>
+    <div class="mainDiv">
+        <h1>Welcome to my game!</h1>
+
+        <!-- <button class="b2" onclick="toggle()">Stop</button> -->
+        <div class="btnL">
+            <button class="levelGame" onclick="userLevel('Beginner');">Beginner</button>
+            <button class="levelGame" onclick="userLevel('Regular')">Regular</button>
+            <button class="levelGame" onclick="userLevel('Advanced')">Advanced</button>
+        </div>
+        <div class="output">
+            <!-- <button class="b1" onclick="init()">New Game</button> -->
+            <h1 class="timmer">The time is:<span> 00:00</span></h1>
+        </div>
+        <table border="1" cellpadding="10" oncontextmenu="return false;">
+            <tbody class="board"></tbody>
+        </table>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
