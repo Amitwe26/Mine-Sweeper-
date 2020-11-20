@@ -1,40 +1,56 @@
 'use strict'
 
 const MINE = '💣';
-const FLAG = '🚩'
+const FLAG = '🚩';
+const WIN = '😎';
+const NORMAL = '😊';
+const LOSE = '🤯';
+
 
 var gLive = 3;
-var gStart = 0;
 var gGameInterval;
 var gBoard;
+var gRandomPositionMine;
 var gGame = {
     isOn: false,
     shownCount: 0,      //how much open
     markedCount: 0,         //how much with flag
     secsPassed: 0           //timmer
 }
+
 var gLevels = {
     'Beginner': { SIZE: 4, MINES: 2 },
     'Regular': { SIZE: 8, MINES: 12 },
     'Advanced': { SIZE: 12, MINES: 30 }
-
 };
+
 var gLevel = {
     SIZE: 4,
     MINES: 2
 };
 
 
+function initGame() {
+    gGame.isOn = false;
+    gGame.shownCount = 0;
+    gGame.secsPassed = 0;
+    gGame.markedCount = 0;
 
+    clearInterval(gGameInterval);
 
-function init() {
+    document.querySelector('.status').innerText = NORMAL;
+    document.querySelector('.timmer span').innerText = '0';
+
     gBoard = buildBoard(gLevel);
-    seedMines(gBoard, gLevel);
-    // randomPosMine(gBoard, gLevel)
-    calcMinesNegs(gBoard);
     renderBoard(gBoard);
-    gStart = 0;
-    clearInterval(gGameInterval)
+}
+
+function initBoard(i, j) {
+    gGame.isOn = true;
+    seedMines(gBoard, gLevel, i, j);
+    calcMinesNegs(gBoard);
+    gGameInterval = setInterval(timerOut, 1000);
+    // renderBoard(gBoard);
 }
 
 function buildBoard(gLevel) {
@@ -56,26 +72,33 @@ function buildBoard(gLevel) {
 }
 
 
-function randomPosMine(gBoard, gLevel) {
-    var randomPositionMine = [];
-    while (randomPositionMine.length !== gLevel.MINES) {
+function seedMines(gBoard, gLevel, i, j) {
+    gRandomPositionMine = [];
+    while (gRandomPositionMine.length !== gLevel.MINES) {
         var numI = getRndInteger(0, gLevel.SIZE - 1);
         var numJ = getRndInteger(0, gLevel.SIZE - 1);
-        if (!gBoard[numI][numJ].isMine) {
+        if (!gBoard[numI][numJ].isMine && numI !== i && numJ !== j) {
             gBoard[numI][numJ].isMine = true;
-            randomPositionMine.push(gBoard[numI][numJ])
-            // console.log('nums mine', numI, numJ, amit);
+            gRandomPositionMine.push({ "i": numI, "j": numJ });
         }
     }
-    // console.log('the array', randomPositionMine);
-    return randomPositionMine;
+
 }
 
-function seedMines(gBoard) {
-    randomPosMine(gBoard, gLevel);
-    // renderBoard(gBoard);
-}
+function revealMines() {
+    for (var index = 0; index < gRandomPositionMine.length; index++) {
+        var minePossision = gRandomPositionMine[index];
+        var i = minePossision["i"];
+        var j = minePossision["j"];
+        var elCell = document.querySelector(`.cell-${i}-${j}`);
+        console.log(elCell);
+        gBoard[i][j].isShown = true;
+        console.log(gBoard[i][j]);
+        elCell.innerText = getCellValue(gBoard[i][j]);
+        elCell.classList.add('cellOpen');
+    }
 
+}
 
 function calcMinesNegs(gBoard) {
     for (var i = 0; i < gLevel.SIZE; i++) {
@@ -93,7 +116,7 @@ function renderBoard(board) {
         for (var j = 0; j < board[0].length; j++) {
             var cell = board[i][j];
             var value = getCellValue(cell)
-            strHTML += `<td class="cell "  onmousedown="cellClicked(this,event,${i},${j})" >${value}</td>`
+            strHTML += `<td class="cell-${i}-${j} cell "  onmousedown="cellClicked(this,event,${i},${j})" >${value}</td>`
         }
         strHTML += '</tr>'
     }
@@ -102,8 +125,9 @@ function renderBoard(board) {
     elContainer.innerHTML = strHTML;
 
 }
+
 function cellClicked(elCell, ev, i, j) {
-    if (gGame.isOn === false) return
+    if (gGame.isOn === false && gGame.shownCount !== 0) return;
     var cell = gBoard[i][j]
     if (ev.button === 2) {                  //right click give me in event "button 2"
         if (cell.isShown) return;
@@ -119,35 +143,44 @@ function cellClicked(elCell, ev, i, j) {
     } else {
         if (cell.isShown) return;
         if (cell.isMarked) return;
+        if (gGame.shownCount === 0) {
+            initBoard(i, j)
+        }
         cell.isShown = true;
         gGame.shownCount++;                         //add to count of open cell 
         elCell.classList.add('cellOpen');
         if (cell.isMine) {
-            gameOver(cell, elCell)
-            clearInterval(gGameInterval);
+            gameOver(cell, elCell);
+            revealMines();
+        } else if (gGame.shownCount === gLevel.SIZE ** 2 - gLevel.MINES) {
+            gameSuccess();
         }
-    }
-    console.log('first click', gGame);
-    if (gStart === 0) {
-        gGameInterval = setInterval(timerOut, 1000);
+
     }
     var value = getCellValue(cell);
     elCell.innerText = value;
-    // renderCell(elCell, value);
 
 }
 
-function startGame() {
-    gGame.isOn = true;
-    init();
+
+function gameSuccess(cell) {
+    clearInterval(gGameInterval);
+    document.querySelector('.status').innerHTML = WIN;
+    gGame.isOn = false;
+    var value = getCellValue(cell);
+    elCell.innerText = value;
+
 
 }
 
 function gameOver(cell, elCell) {
+    clearInterval(gGameInterval);
+    document.querySelector('.status').innerHTML = LOSE;
     gGame.isOn = false;
     var value = getCellValue(cell);
     elCell.innerText = value;
     elCell.classList.add('cellMine');
+
 }
 
 function getCellValue(cell) {                       //get in the cell and check what the value
@@ -167,30 +200,25 @@ function getCellValue(cell) {                       //get in the cell and check 
 
 }
 
-// function openMine(gLevel, cell) {
-//     // var cellsMine =[] 
-//     for (var i = 0; i < gLevel.SIZE; i++) {
-//         for (var j = 0; j < gLevel.SIZE; j++) {
-//             if (cell.isMine) {
-//                 cell.isShown = true;
-//                 Cell.classList.add('cellMine');
 
-//             }
-//         }
-//     }
-// }
 
-function userLevel(userInput) {
+function changeLevel(userInput) {
+    if (gGame.isOn) {
+        var result = confirm('New game?');
+        if (!result) {
+            return;
+        }
+    }
     gLevel = gLevels[userInput];
-    init();
-    gGame.isOn = true;
+    initGame()
 }
+
 function timerOut() {
 
-    gStart++
+    gGame.secsPassed++
     var getH1 = document.querySelector('.timmer span');
-    getH1.innerText = gStart;
+    getH1.innerText = gGame.secsPassed;
 
-    console.log(gStart);
+    console.log(gGame.secsPassed);
 
 }

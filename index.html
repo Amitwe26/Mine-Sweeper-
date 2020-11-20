@@ -8,19 +8,18 @@
     <title>Mine Sweeper</title>
 </head>
 
-<body onload="startGame()">
+<body onload="initGame()">
     <div class="mainDiv">
         <h1>Mine Sweeper</h1>
         <h3>Welcome to my game!</h3>
 
-        <!-- <button class="b2" onclick="toggle()">Stop</button> -->
         <div class="btnL">
-            <button class="levelGame" onclick="userLevel('Beginner');">Beginner</button>
-            <button class="levelGame" onclick="userLevel('Regular')">Regular</button>
-            <button class="levelGame" onclick="userLevel('Advanced')">Advanced</button>
+            <button class="levelGame" onclick="changeLevel('Beginner');">Beginner</button>
+            <button class="levelGame" onclick="changeLevel('Regular')">Regular</button>
+            <button class="levelGame" onclick="changeLevel('Advanced')">Advanced</button>
         </div>
         <div class="output">
-            <button class="b1" onclick="startGame()">😋</button>
+            <button class="status" onclick="initGame()"></button>
             <h1 class="timmer"><span> </span></h1>
         </div>
         <table border="1" cellpadding="10" oncontextmenu="return false;">

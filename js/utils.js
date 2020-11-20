@@ -18,18 +18,18 @@ function setMinesNegsCount(mat, rowIdx, colIdx) {
 }
 
 
-function toOpenCell() {
-    var elOpen = document.querySelector('.cell');
-    elOpen.classList.add('cellOpen')
+// function toOpenCell() {
+//     var elOpen = document.querySelector('.cell');
+//     elOpen.classList.add('cellOpen')
 
-}
+// }
 
-function play() {
+// function play() {
 
-    gGameInterval = setInterval(timerOut, 150);
-    console.log(gTime);
+//     gGameInterval = setInterval(timerOut, 150);
+//     console.log(gTime);
 
-}
+// }
 
 
 

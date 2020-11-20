@@ -23,7 +23,7 @@ button:hover{
     padding-left: 15px;
     transition: all 1.3s;
 }
-.b1 {
+.status {
     width: 90px;
     font-size:50px;
     background-color: black;
