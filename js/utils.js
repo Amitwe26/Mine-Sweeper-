@@ -1,35 +1,32 @@
+'use strict'
 
+function calcMinesNegs(gBoard) {
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            setMinesNegsCount(gBoard, i, j)
+        }
 
-function setMinesNegsCount(mat, rowIdx, colIdx) {
+    }
+}
+
+function setMinesNegsCount(gBoard, rowIdx, colIdx) {
     var count = 0
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
-        if (i < 0 || i >= mat.length) continue                  //מציאת שכנים 
+        if (i < 0 || i >= gBoard.length) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
-            if (j < 0 || j >= mat.length) continue
+            if (j < 0 || j >= gBoard.length) continue
             if (rowIdx === i && colIdx === j) continue
             // console.log(mat[i][j].isMine, i, j);
-            if (mat[i][j].isMine === true) {
+            if (gBoard[i][j].isMine === true) {
                 count++
             }
         }
-        // console.log('the value is:', count);
     }
-    mat[rowIdx][colIdx].mineAroundCount = count;
+    gBoard[rowIdx][colIdx].mineAroundCount = count;
 }
 
 
-// function toOpenCell() {
-//     var elOpen = document.querySelector('.cell');
-//     elOpen.classList.add('cellOpen')
 
-// }
-
-// function play() {
-
-//     gGameInterval = setInterval(timerOut, 150);
-//     console.log(gTime);
-
-// }
 
 
 

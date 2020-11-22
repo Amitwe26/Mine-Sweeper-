@@ -51,7 +51,7 @@ table{
     
   
 }
-.cell:hover {
+.cell:not(.cellOpen):hover {
     background-color:  rgb(245, 241, 241);;
 }
 
